@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<style>
+html,body{ margin: 0; padding: 0;}
+ul{ margin: 0; padding: 0; list-style: none;}
+body{ font-size: 12px;}
+a{ text-decoration: none;}
+#wrap{ width: 760px; height: 220px; background: url(img/bg.jpg) no-repeat; margin: 100px auto; padding: 140px 120px;}
+nav{ height: 50px; line-height: 50px; background: url(img/nav_bg.png) no-repeat; padding: 0 20px;}
+mark{ display: inline-block; margin: 0  10px; height: 18px; line-height: 18px; padding:3px 2px 3px 6px; background: none; color:#28a5c4; border: 1px solid #28a5c4;}
+mark a{ display: inline-block; margin-left: 10px; padding:0 5px; color: #fff; background: #28a5c4;}
+.list{ padding: 28px; background: url(img/type_bg.png) no-repeat;}
+.list li{line-height: 42px; color: #8a8a8a;}
+.list a{ color: #000; margin-right: 10px;}
+.list .active{ background: #28a5c4;}
+</style>
+<script src="./src/vue.js"></script>
+<body>
+	<div id="wrap">
+		<nav>
+			你的选择是：
+			<mark 
+				v-on:click="removekey(key)"
+				v-for="item,key in choose"
+			>
+				{{item}}<a href="javascript:">X</a>
+			</mark>
+		</nav>
+		<ul class="list">
+			<li v-for="item,index in dataList">
+				{{item.title}}：
+				<a 
+					href="javascript:" 
+					v-for="opt,i in item.list"
+					v-on:click="addChooseHandle(opt,index,i)"
+					v-bind:class="{active:item.index===i}"
+				>
+					{{opt}}
+				</a>
+			</li>
+		</ul>
+	</div>
+<script type="text/javascript">
+	var data=[
+		{
+			title:'品牌',
+			list:["苹果","小米","锤子","魅族","华为","OPPO","vivo","乐视","360","中兴"]
+		},
+		{
+			title:'尺寸',
+			list:["3.0英寸以下","3.0-3.9英寸","4.0-4.5英寸","4.6-4.9英寸","5.0-5.5英寸","6.0英寸以上"]
+		},
+		{
+			title:'系统',
+			list:["安卓","苹果","微软","无","其他"]
+		},
+		{
+			title:'网络',
+			list:["双卡单4G","双卡双4G","移动4G","电信4G","联通4G"]
+		}
+	]
+</script>
+
+<script>
+	let vm=new Vue({
+		el:'#wrap',
+		data:{
+			dataList:data,
+			choose:{}
+		},
+		methods:{
+			addChooseHandle(option,index,i){
+				this.$set(this.choose,index,option);
+				this.dataList[index].index=i;
+				console.log(this.choose)
+			},
+			removekey(key){
+				this.$delete(this.choose,key);
+				this.dataList[key].index=-1;
+			}
+		}
+	})
+</script>
+</body>
+</html>
